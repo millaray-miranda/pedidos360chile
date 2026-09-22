@@ -1,0 +1,18 @@
+# Base de datos local para desarrollo. En la nube (AWS RDS / Azure Database for
+# PostgreSQL) se cambia solo la cadena de conexión de cada microservicio; el
+# código de entidades y repositorios no cambia.
+services:
+  db:
+    image: postgres:16
+    container_name: pedidos360-db
+    environment:
+      POSTGRES_DB: pedidos360
+      POSTGRES_USER: pedidos
+      POSTGRES_PASSWORD: pedidos_dev
+    ports:
+      - "5434:5432"
+    volumes:
+      - pedidos360-db-data:/var/lib/postgresql/data
+
+volumes:
+  pedidos360-db-data:

@@ -1,0 +1,5 @@
+cl\duoc\pedidos360\productos\DataSeeder.class
+cl\duoc\pedidos360\productos\repository\ProductoRepository.class
+cl\duoc\pedidos360\productos\model\Producto.class
+cl\duoc\pedidos360\productos\ProductosServiceApplication.class
+cl\duoc\pedidos360\productos\web\ProductoController.class
