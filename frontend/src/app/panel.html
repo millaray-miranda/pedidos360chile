@@ -1,73 +1,134 @@
-<nav class="tabs">
-  <button
-    class="tab"
-    [class.tab--activa]="vista() === 'pedidos'"
-    (click)="cambiarVista('pedidos')">
-    Pedidos
-  </button>
-  <button
-    class="tab"
-    [class.tab--activa]="vista() === 'productos'"
-    (click)="cambiarVista('productos')">
-    Productos
-  </button>
-</nav>
+<section class="panel">
+  <div class="kpis">
+    <div class="kpi">
+      <span class="kpi__valor">{{ totalPedidos() }}</span>
+      <span class="kpi__etiqueta">Pedidos</span>
+    </div>
+    <div class="kpi">
+      <span class="kpi__valor">{{ montoTotal() | currency:'CLP':'symbol-narrow':'1.0-0' }}</span>
+      <span class="kpi__etiqueta">Monto total</span>
+    </div>
+    <div class="kpi">
+      <span class="kpi__valor">{{ totalProductos() }}</span>
+      <span class="kpi__etiqueta">Productos</span>
+    </div>
+    <div class="kpi" [class.kpi--alerta]="stockBajo() > 0">
+      <span class="kpi__valor">{{ stockBajo() }}</span>
+      <span class="kpi__etiqueta">Stock bajo (≤ 5)</span>
+    </div>
+  </div>
 
-@if (cargando()) {
-  <p class="estado">Cargando datos…</p>
-} @else if (error()) {
-  <p class="estado estado--error">{{ error() }}</p>
-} @else {
+  <div class="barra">
+    <nav class="tabs">
+      <button
+        class="tab"
+        [class.tab--activa]="vista() === 'pedidos'"
+        (click)="cambiarVista('pedidos')">
+        Pedidos <span class="contador">{{ totalPedidos() }}</span>
+      </button>
+      <button
+        class="tab"
+        [class.tab--activa]="vista() === 'productos'"
+        (click)="cambiarVista('productos')">
+        Productos <span class="contador">{{ totalProductos() }}</span>
+      </button>
+    </nav>
 
-  @if (vista() === 'pedidos') {
-    <table class="tabla">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Cliente</th>
-          <th>Producto</th>
-          <th>Cant.</th>
-          <th>Total</th>
-          <th>Estado</th>
-          <th>Fecha</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (p of pedidos(); track p.id) {
+    <div class="acciones">
+      <input
+        class="buscador"
+        type="search"
+        placeholder="Buscar…"
+        [ngModel]="busqueda()"
+        (ngModelChange)="busqueda.set($event)"
+        aria-label="Buscar en la tabla">
+      <button class="boton boton--secundario" (click)="cargar()" [disabled]="cargando()">
+        {{ cargando() ? 'Cargando…' : 'Actualizar' }}
+      </button>
+    </div>
+  </div>
+
+  @if (cargando()) {
+    <div class="esqueleto">
+      @for (fila of [1,2,3,4,5]; track fila) {
+        <div class="esqueleto__fila"></div>
+      }
+    </div>
+  } @else if (error()) {
+    <div class="aviso aviso--error">
+      <strong>No se pudieron cargar los datos</strong>
+      <p>{{ error() }}</p>
+      <button class="boton" (click)="cargar()">Reintentar</button>
+    </div>
+  } @else if (vista() === 'pedidos') {
+
+    @if (pedidosFiltrados().length === 0) {
+      <p class="aviso">No hay pedidos que coincidan con la búsqueda.</p>
+    } @else {
+      <table class="tabla">
+        <thead>
           <tr>
-            <td>{{ p.id }}</td>
-            <td>{{ p.cliente }}</td>
-            <td>{{ p.producto }}</td>
-            <td>{{ p.cantidad }}</td>
-            <td>{{ p.total | currency:'CLP':'symbol-narrow':'1.0-0' }}</td>
-            <td><span class="chip">{{ p.estado }}</span></td>
-            <td>{{ p.fecha }}</td>
+            <th>#</th>
+            <th>Cliente</th>
+            <th>Producto</th>
+            <th class="num">Cant.</th>
+            <th class="num">Total</th>
+            <th>Estado</th>
+            <th>Fecha</th>
           </tr>
-        }
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          @for (p of pedidosFiltrados(); track p.id) {
+            <tr>
+              <td class="tenue">{{ p.id }}</td>
+              <td class="fuerte">{{ p.cliente }}</td>
+              <td>{{ p.producto }}</td>
+              <td class="num">{{ p.cantidad }}</td>
+              <td class="num fuerte">{{ p.total | currency:'CLP':'symbol-narrow':'1.0-0' }}</td>
+              <td><span [class]="claseEstado(p.estado)">{{ p.estado }}</span></td>
+              <td class="tenue">{{ p.fecha }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+
   } @else {
-    <table class="tabla">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>SKU</th>
-          <th>Nombre</th>
-          <th>Precio</th>
-          <th>Stock</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (p of productos(); track p.id) {
+
+    @if (productosFiltrados().length === 0) {
+      <p class="aviso">No hay productos que coincidan con la búsqueda.</p>
+    } @else {
+      <table class="tabla">
+        <thead>
           <tr>
-            <td>{{ p.id }}</td>
-            <td><span class="chip">{{ p.sku }}</span></td>
-            <td>{{ p.nombre }}</td>
-            <td>{{ p.precio | currency:'CLP':'symbol-narrow':'1.0-0' }}</td>
-            <td>{{ p.stock }}</td>
+            <th>#</th>
+            <th>SKU</th>
+            <th>Nombre</th>
+            <th class="num">Precio</th>
+            <th class="num">Stock</th>
           </tr>
-        }
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          @for (p of productosFiltrados(); track p.id) {
+            <tr>
+              <td class="tenue">{{ p.id }}</td>
+              <td><span class="chip chip--gris">{{ p.sku }}</span></td>
+              <td class="fuerte">{{ p.nombre }}</td>
+              <td class="num">{{ p.precio | currency:'CLP':'symbol-narrow':'1.0-0' }}</td>
+              <td class="num">
+                <span [class]="p.stock <= 5 ? 'chip chip--alerta' : 'chip chip--ok'">{{ p.stock }}</span>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
   }
-}
+
+  <footer class="pie">
+    <span>Datos servidos por <code>{{ origen }}</code></span>
+    @if (ultimaCarga()) {
+      <span>Última actualización: {{ ultimaCarga() | date:'HH:mm:ss' }}</span>
+    }
+  </footer>
+</section>
