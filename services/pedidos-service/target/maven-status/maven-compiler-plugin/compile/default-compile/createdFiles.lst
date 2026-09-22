@@ -1,4 +1,5 @@
 cl\duoc\pedidos360\pedidos\repository\PedidoRepository.class
+cl\duoc\pedidos360\pedidos\security\SecurityConfig.class
 cl\duoc\pedidos360\pedidos\DataSeeder.class
 cl\duoc\pedidos360\pedidos\model\Pedido.class
 cl\duoc\pedidos360\pedidos\web\PedidoController.class
