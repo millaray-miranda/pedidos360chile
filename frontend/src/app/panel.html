@@ -1,0 +1,73 @@
+<nav class="tabs">
+  <button
+    class="tab"
+    [class.tab--activa]="vista() === 'pedidos'"
+    (click)="cambiarVista('pedidos')">
+    Pedidos
+  </button>
+  <button
+    class="tab"
+    [class.tab--activa]="vista() === 'productos'"
+    (click)="cambiarVista('productos')">
+    Productos
+  </button>
+</nav>
+
+@if (cargando()) {
+  <p class="estado">Cargando datos…</p>
+} @else if (error()) {
+  <p class="estado estado--error">{{ error() }}</p>
+} @else {
+
+  @if (vista() === 'pedidos') {
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Cliente</th>
+          <th>Producto</th>
+          <th>Cant.</th>
+          <th>Total</th>
+          <th>Estado</th>
+          <th>Fecha</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (p of pedidos(); track p.id) {
+          <tr>
+            <td>{{ p.id }}</td>
+            <td>{{ p.cliente }}</td>
+            <td>{{ p.producto }}</td>
+            <td>{{ p.cantidad }}</td>
+            <td>{{ p.total | currency:'CLP':'symbol-narrow':'1.0-0' }}</td>
+            <td><span class="chip">{{ p.estado }}</span></td>
+            <td>{{ p.fecha }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else {
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>SKU</th>
+          <th>Nombre</th>
+          <th>Precio</th>
+          <th>Stock</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (p of productos(); track p.id) {
+          <tr>
+            <td>{{ p.id }}</td>
+            <td><span class="chip">{{ p.sku }}</span></td>
+            <td>{{ p.nombre }}</td>
+            <td>{{ p.precio | currency:'CLP':'symbol-narrow':'1.0-0' }}</td>
+            <td>{{ p.stock }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+}

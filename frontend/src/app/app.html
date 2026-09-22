@@ -1,0 +1,31 @@
+<main class="contenedor">
+  <header class="cabecera">
+    <div>
+      <h1>Pedidos360</h1>
+      <p>Sistema de gestión de pedidos · Desarrollo Cloud Native</p>
+    </div>
+
+    <div class="sesion">
+      @if (usuario()) {
+        <div class="sesion__datos">
+          <span class="sesion__nombre">{{ usuario() }}</span>
+          <span class="sesion__claims">
+            @for (r of roles(); track r) {
+              <span class="chip">{{ r }}</span>
+            } @empty {
+              <span class="chip chip--gris">sin rol</span>
+            }
+            @for (s of scopes(); track s) {
+              <span class="chip chip--gris">{{ s }}</span>
+            }
+          </span>
+        </div>
+        <button class="boton boton--secundario" (click)="cerrarSesion()">Cerrar sesión</button>
+      } @else {
+        <button class="boton" (click)="iniciarSesion()">Iniciar sesión</button>
+      }
+    </div>
+  </header>
+
+  <router-outlet />
+</main>

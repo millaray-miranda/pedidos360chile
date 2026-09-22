@@ -1,0 +1,144 @@
+.contenedor {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 20px;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: #1a2230;
+}
+
+.cabecera h1 {
+  margin: 0;
+  font-size: 26px;
+  color: #0b3d91;
+}
+
+.cabecera p {
+  margin: 4px 0 24px;
+  color: #5a6472;
+  font-size: 14px;
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid #e5e8ee;
+  margin-bottom: 16px;
+}
+.tab {
+  border: none;
+  background: none;
+  padding: 10px 18px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: #7a828e;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+.tab:hover {
+  color: #1a2230;
+}
+.tab--activa {
+  color: #0b3d91;
+  border-bottom-color: #0b3d91;
+}
+
+.estado {
+  padding: 16px;
+  color: #5a6472;
+}
+.estado--error {
+  color: #b3261e;
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.tabla th,
+.tabla td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid #e5e8ee;
+}
+.tabla th {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #7a828e;
+}
+
+.chip {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: #eaf0fb;
+  color: #0b3d91;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* --- Sesión (cabecera) --- */
+.cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.sesion {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.sesion__datos {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+.sesion__nombre {
+  font-size: 14px;
+  font-weight: 600;
+}
+.sesion__claims {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.chip--gris {
+  background: #eef0f3;
+  color: #5a6472;
+}
+
+.boton {
+  display: inline-block;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 16px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  background: #0b3d91;
+  color: #fff;
+  cursor: pointer;
+  text-decoration: none;
+}
+.boton:hover {
+  background: #092f70;
+}
+.boton--secundario {
+  background: #eaf0fb;
+  color: #0b3d91;
+}
+.boton--secundario:hover {
+  background: #d9e4f7;
+}
+
+.bienvenida {
+  padding: 32px 0;
+  color: #5a6472;
+}
